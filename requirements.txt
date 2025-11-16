@@ -1,1 +1,158 @@
+from flask import Flask, request, jsonify, abort
+import math
+import os
+from functools import lru_cache
+
+app = Flask(__name__)
+
+# --- Helper math functions ---
+def factorial(n):
+    if n < 2:
+        return 1
+    f = 1
+    for i in range(2, n+1):
+        f *= i
+    return f
+
+def poisson_prob(k, lamb):
+    # P(X=k) = e^-lambda * lambda^k / k!
+    return math.exp(-lamb) * (lamb ** k) / factorial(k)
+
+def compute_match_prob(home_xg, away_xg, max_goals=8):
+    # Build PMFs for goals 0..max_goals
+    home_p = [poisson_prob(k, home_xg) for k in range(max_goals+1)]
+    away_p = [poisson_prob(k, away_xg) for k in range(max_goals+1)]
+    p_home_win = p_draw = p_away_win = 0.0
+    for i in range(max_goals+1):
+        for j in range(max_goals+1):
+            p = home_p[i] * away_p[j]
+            if i > j:
+                p_home_win += p
+            elif i == j:
+                p_draw += p
+            else:
+                p_away_win += p
+    total = p_home_win + p_draw + p_away_win
+    # Normalize (accounts for tail probability beyond max_goals)
+    return {
+        "home": p_home_win / total,
+        "draw": p_draw / total,
+        "away": p_away_win / total
+    }
+
+def prob_over_25(home_xg, away_xg, max_goals=8):
+    # probability total goals > 2.5 = 1 - P(total goals <= 2)
+    home_p = [poisson_prob(k, home_xg) for k in range(max_goals+1)]
+    away_p = [poisson_prob(k, away_xg) for k in range(max_goals+1)]
+    prob_under_or_equal_2 = 0.0
+    for i in range(0,3):  # 0,1,2 goals for home
+        for j in range(0,3):  # 0,1,2 goals for away
+            prob_under_or_equal_2 += home_p[i] * away_p[j]
+    return 1.0 - prob_under_or_equal_2
+
+# Simple in-memory "match DB" for demo. Replace this with a real DB or data pipeline.
+MATCH_DB = {
+    "m_20251115_001": {
+        "match": "Switzerland vs Sweden",
+        "date": "2025-11-15T19:45:00Z",
+        "home_xg": 1.58,
+        "away_xg": 0.95,
+        "odds": {"home": 2.00, "draw": 3.60, "away": 4.20}
+    },
+    "m_20251115_002": {
+        "match": "Georgia vs Spain",
+        "date": "2025-11-15T17:00:00Z",
+        "home_xg": 0.80,
+        "away_xg": 1.95,
+        "odds": {"home": 6.00, "draw": 4.50, "away": 1.50}
+    }
+}
+
+def implied_prob_from_odds(decimal_odds):
+    # simple conversion to implied probability; caller should normalize for vig
+    if decimal_odds <= 1:
+        return 0.0
+    return 1.0 / decimal_odds
+
+def normalize_probs(d):
+    s = sum(d.values())
+    if s == 0:
+        return d
+    return {k: v / s for k, v in d.items()}
+
+def blend_probs(stat, market, weight_stat=0.6):
+    weight_market = 1.0 - weight_stat
+    return {
+        "home": weight_stat * stat["home"] + weight_market * market["home"],
+        "draw": weight_stat * stat["draw"] + weight_market * market["draw"],
+        "away": weight_stat * stat["away"] + weight_market * market["away"],
+    }
+
+# Very small cache to avoid recomputing heavy stats repeatedly
+from functools import lru_cache
+
+@lru_cache(maxsize=256)
+def predict_from_match_id(match_id, detail=False):
+    if match_id not in MATCH_DB:
+        return None
+    m = MATCH_DB[match_id]
+    stat = compute_match_prob(m["home_xg"], m["away_xg"])
+    market = {
+        "home": implied_prob_from_odds(m["odds"]["home"]),
+        "draw": implied_prob_from_odds(m["odds"]["draw"]),
+        "away": implied_prob_from_odds(m["odds"]["away"])
+    }
+    market = normalize_probs(market)
+    blended = blend_probs(stat, market)
+    over25 = prob_over_25(m["home_xg"], m["away_xg"])
+    # simple stake suggestion (toy logic based on edge vs implied)
+    implied_home = market["home"]
+    edge = blended["home"] - implied_home
+    stake = "small"
+    if edge > 0.12:
+        stake = "large"
+    elif edge > 0.05:
+        stake = "medium"
+    result = {
+        "matchId": match_id,
+        "match": m["match"],
+        "date": m["date"],
+        "probabilities": {k: round(v, 4) for k, v in blended.items()},
+        "markets": {
+            "1X2": "Home" if blended["home"] > max(blended["draw"], blended["away"]) else ("Away" if blended["away"] > blended["home"] else "Draw"),
+            "BTTS": "Yes" if over25 > 0.5 else "No",
+            "Over2.5": round(over25, 4),
+            "AH": "Home -0.5" if blended["home"] > 0.55 else "No clear AH"
+        },
+        "stake_recommendation": stake,
+        "confidence": round(max(blended.values()), 3),
+        "rationale": f"Model blends Poisson stats (xG home={m['home_xg']}, away={m['away_xg']}) with market odds.",
+        "model": {"version": "v1.0-poisson+market", "notes": "60% stat + 40% market"},
+        "generated_at": __import__('datetime').datetime.utcnow().isoformat() + 'Z'
+    }
+    return result
+
+@app.route('/predict/<match_id>', methods=['GET'])
+def predict_get(match_id):
+    # public endpoint returns teaser unless ?detail=true is set and API_KEY matches
+    detail = request.args.get('detail', 'false').lower() == 'true'
+    api_key = request.headers.get('x-api-key') or request.args.get('api_key')
+    res = predict_from_match_id(match_id, detail=detail)
+    if res is None:
+        abort(404, description='Match not found')
+    if detail and os.getenv('API_KEY') and api_key != os.getenv('API_KEY'):
+        # unauthorized for detailed view
+        return jsonify({"teaser": "Full analysis available for VIPs. Get a subscription to access full analysis."}), 403
+    return jsonify(res)
+
+@app.route('/predict', methods=['POST'])
+def predict_post():
+    # Accept JSON with home_xg and away_xg OR matchId. Return prediction JSON.
+    body = request.get_json(force=True)
+    if not body:
+        abort(400, description='JSON body required')
+    # If match_id provided, use DB
+    match_id = body.get('matchId') or body.get('match_id')
+    if match_id:
+        res = predict_from_match_id(match_id)
 
