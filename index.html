@@ -1,1 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>winnersPro — AI-backed soccer predictions</title>
+  <meta name="description" content="winnersPro — AI-backed soccer predictions. Daily, data-driven match insights delivered to web, WhatsApp or Telegram." />
+  <!-- Tailwind via CDN for quick prototyping -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="theme-color" content="#4f46e5" />
+  <!-- Simple JSON-LD for search engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsBusiness",
+    "name": "winnersPro",
+    "url": "https://example.com",
+    "description": "AI-backed soccer predictions with transparent performance reporting.",
+    "sameAs": []
+  }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold">WP</div>
+        <div>
+          <a href="#" class="text-2xl font-semibold">winnersPro</a>
+          <div class="text-xs opacity-90">AI-backed soccer predictions</div>
+        </div>
+      </div>
+
+      <nav class="space-x-4 hidden md:flex">
+        <a href="#home" class="hover:underline">Home</a>
+        <a href="#about" class="hover:underline">About</a>
+        <a href="#services" class="hover:underline">Services</a>
+        <a href="#predictions" class="hover:underline">Predictions</a>
+        <a href="#pricing" class="hover:underline">Pricing</a>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <a href="#signup" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium shadow">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero / Intro -->
+  <main id="home" class="max-w-6xl mx-auto px-6 py-12">
+    <section class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="text-4xl font-extrabold">winnersPro — AI-backed soccer predictions</h1>
+        <p class="mt-4 text-gray-700">Reliable, transparent predictions powered by machine learning and market signals. Try a free trial and get daily premium picks sent to WhatsApp or Telegram.</p>
+
+        <div class="mt-6 flex items-center space-x-4">
+          <a href="#signup" class="bg-indigo-600 text-white px-5 py-3 rounded-lg font-semibold shadow">Start free trial</a>
+          <a href="#predictions" class="border px-5 py-3 rounded-lg">See today's picks</a>
+        </div>
+
+        <div class="mt-8 grid grid-cols-3 gap-4">
+          <div class="p-4 bg-white rounded-lg shadow-sm">
+            <div class="font-bold">Transparent Record</div>
+            <div class="text-sm text-gray-600 mt-1">Weekly performance updates.</div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm">
+            <div class="font-bold">AI + Market Signals</div>
+            <div class="text-sm text-gray-600 mt-1">Blends xG, odds and recent form.</div>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow-sm">
+            <div class="font-bold">WhatsApp & Telegram</div>
+            <div class="text-sm text-gray-600 mt-1">Deliver picks where users already are.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample predictions card -->
+      <aside class="bg-white rounded-xl p-6 shadow">
+        <div class="font-semibold">Sample predictions — today</div>
+        <ul id="sample-list" class="mt-4 space-y-3">
+          <!-- Items will be populated by JS -->
+        </ul>
+
+        <div class="mt-6 flex justify-between items-center">
+          <div class="text-sm text-gray-600">Want these delivered to WhatsApp?</div>
+          <a href="#signup" class="px-4 py-2 bg-indigo-600 text-white rounded-lg">Join VIP</a>
+        </div>
+      </aside>
+    </section>
+
+    <!-- How it works -->
+    <section id="about" class="mt-14">
+      <h2 class="text-2xl font-bold">How winnersPro works</h2>
+      <div class="mt-4 grid md:grid-cols-3 gap-6">
+        <div class="p-4 bg-white rounded-lg shadow-sm">
+          <div class="font-semibold">1. Data</div>
+          <div class="text-sm text-gray-600 mt-2">We aggregate odds, xG, form and injuries.</div>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-sm">
+          <div class="font-semibold">2. AI Engine</div>
+          <div class="text-sm text-gray-600 mt-2">Proprietary pipeline generates probabilities & markets.</div>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-sm">
+          <div class="font-semibold">3. Delivery</div>
+          <div class="text-sm text-gray-600 mt-2">Daily picks to web, WhatsApp, or Telegram.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Predictions -->
+    <section id="predictions" class="mt-14">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Today's Predictions</h1>
+        <div id="picks-count" class="text-sm text-gray-600">0 picks</div>
+      </div>
+
+      <div id="predictions-grid" class="mt-6 grid gap-4">
+        <!-- Prediction cards will be rendered here -->
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="mt-14">
+      <h1 class="text-3xl font-bold">Pricing</h1>
+      <div class="mt-6 grid md:grid-cols-3 gap-6">
+        <div class="p-6 bg-white rounded-lg shadow-sm">
+          <div class="text-xl font-semibold">Free</div>
+          <div class="mt-2 text-sm text-gray-600">Daily sample picks — great for testing the service.</div>
+          <div class="mt-4 font-bold">R0 / month</div>
+          <button class="mt-4 w-full px-4 py-2 border rounded">Get free</button>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-sm border-2 border-indigo-600">
+          <div class="text-xl font-semibold">VIP</div>
+          <div class="mt-2 text-sm text-gray-600">Full access to daily premium picks delivered to WhatsApp/Telegram.</div>
+          <div class="mt-4 font-bold">R199 / month</div>
+          <button class="mt-4 w-full px-4 py-2 bg-indigo-600 text-white rounded">Start trial</button>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-sm">
+          <div class="text-xl font-semibold">Business</div>
+          <div class="mt-2 text-sm text-gray-600">Custom feeds & API access for partners.</div>
+          <div class="mt-4 font-bold">Contact us</div>
+          <button class="mt-4 w-full px-4 py-2 border rounded">Contact sales</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signup -->
+    <section id="signup" class="mt-14 max-w-2xl mx-auto">
+      <h2 class="text-2xl font-bold">Start your free trial</h2>
+      <form id="signup-form" class="mt-6 bg-white p-6 rounded-lg shadow-sm grid gap-4">
+        <input id="email" type="email" placeholder="you@example.com" required class="border rounded px-3 py-2" />
+        <input id="phone" type="tel" placeholder="+27 71 000 0000 (for WhatsApp delivery)" class="border rounded px-3 py-2" />
+        <div class="flex items-center justify-between">
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Start free trial</button>
+          <div class="text-sm text-gray-500">No card required</div>
+        </div>
+        <div id="signup-result" class="text-sm text-green-600 hidden">Thanks — we'll contact you to activate your trial.</div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t bg-gray-100 mt-12">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <div class="md:flex md:justify-between">
+        <div>
+          <div class="font-bold text-lg">winnersPro</div>
+          <div class="text-sm text-gray-600 mt-2">AI-backed soccer predictions you can trust. Trackable results & transparent record.</div>
+        </div>
+
+        <div class="mt-6 md:mt-0 grid grid-cols-3 gap-6">
+          <div>
+            <div class="font-semibold">Links</div>
+            <ul class="mt-2 space-y-1 text-sm text-gray-700">
+              <li><a href="#home" class="hover:underline">Home</a></li>
+              <li><a href="#about" class="hover:underline">About</a></li>
+              <li><a href="#services" class="hover:underline">Services</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="font-semibold">Products</div>
+            <ul class="mt-2 space-y-1 text-sm text-gray-700">
+              <li><a href="#predictions" class="hover:underline">Daily Predictions</a></li>
+              <li><a href="#pricing" class="hover:underline">Pricing</a></li>
+              <li><a href="#signup" class="hover:underline">Sign up</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="font-semibold">Support</div>
+            <ul class="mt-2 space-y-1 text-sm text-gray-700">
+              <li><a href="#contact" class="hover:underline">Contact</a></li>
+              <li><a href="#" class="hover:underline">Privacy</a></li>
+              <li><a href="#" class="hover:underline">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-sm text-gray-500">© <span id="year"></span> winnersPro — All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Minimal JS: sample data + API fetch placeholder -->
+  <script>
+    // set year
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    // sample predictions to show immediately
+    const samplePredictions = [
+      {
+        id: 1,
+        match: "Switzerland vs Sweden",
+        date: "2025-11-15",
+        pick: "Switzerland to win",
+        market: "1 / Switzerland +0.5",
+        rationale: "Home advantage + better attacking form. (AI-assisted)",
+        confidence: 52
+      },
+      {
+        id: 2,
+        match: "Georgia vs Spain",
+        date: "2025-11-15",
+        pick: "Over 2.5 goals",
+        market: "Over 2.5",
+        rationale: "Spain attacking profile vs open defensive structure.",
+        confidence: 65
+      },
+      {
+        id: 3,
+        match: "Kazakhstan vs Belgium",
+        date: "2025-11-15",
+        pick: "Belgium -1",
+        market: "Belgium -1",
+        rationale: "Belgium clear strength advantage.",
+        confidence: 70
+      }
+    ];
+
+    // helper to render prediction cards
+    function renderPredictions(list) {
+      const grid = document.getElementById('predictions-grid');
+      grid.innerHTML = '';
+      list.forEach(p => {
+        const el = document.createElement('article');
+        el.className = 'p-4 bg-white rounded-lg shadow-sm';
+        el.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold text-lg">${p.match}</div>
+              <div class="text-sm text-gray-600 mt-1">${p.pick} • ${p.market}</div>
+            </div>
+            <div class="text-sm text-gray-500">${p.date}</div>
+          </div>
+          <div class="mt-3 text-sm text-gray-700">${p.rationale}</div>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-xs text-gray-500">AI confidence: ${p.confidence}%</div>
+            <div class="flex items-center space-x-2">
+              <button class="px-3 py-1 text-sm border rounded" onclick="savePick(${p.id})">Save</button>
+              <button class="px-3 py-1 text-sm bg-indigo-600 text-white rounded" onclick="subscribePick(${p.id})">Subscribe</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+
+      document.getElementById('picks-count').innerText = list.length + ' picks';
+    }
+
+    // initial render with samples
+    renderPredictions(samplePredictions);
+    const sampleListEl = document.getElementById('sample-list');
+    samplePredictions.forEach(p => {
+      const li = document.createElement('li');
+      li.className = 'p-3 border rounded-lg';
+      li.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="font-semibold">${p.match}</div>
+            <div class="text-sm text-gray-600">${p.pick} • ${p.market}</div>
+          </div>
+          <div class="text-xs text-gray-500">${p.date}</div>
+        </div>
+        <div class="mt-2 text-sm text-gray-600">${p.rationale}</div>
+      `;
+      sampleListEl.appendChild(li);
+    });
+
+    // placeholder functions for actions
+    function savePick(id) {
+      alert('Saved pick #' + id + ' to your account (demo).');
+    }
+    function subscribePick(id) {
+      alert('Subscribe clicked for pick #' + id + ' — redirect to signup/payment (demo).');
+    }
+
+    // Example: fetch live predictions from your API
+    // Replace '/api/predictions' with your real endpoint
+    async function fetchLivePredictions() {
+      try {
+        const res = await fetch('/api/predictions'); // <-- update to your API
+        if (!res.ok) throw new Error('API not available');
+        const data = await res.json();
+        // expected: data = [{id, match, date, pick, market, rationale, confidence}, ...]
+        renderPredictions(data);
+      } catch (err) {
+        // If API fails, we keep showing the sample predictions (silent fallback)
+        console.warn('Could not fetch live predictions — using sample data.', err);
+      }
+    }
+
+    // If you want to load live predictions on page load, uncomment:
+    // fetchLivePredictions();
+
+    // Signup form handler (demo)
+    document.getElementById('signup-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      // TODO: send data to backend / payment provider
+      document.getElementById('signup-result').classList.remove('hidden');
+      // clear form
+      this.reset();
+    });
+  </script>
+</body>
+</html>
 
