@@ -3,12 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>winnersPro — AI-backed soccer predictions</title>
+  <title>WinMastersAI — AI-backed soccer predictions</title>
   <meta name="description" content="WinMastersAI — AI-backed soccer predictions. Daily, data-driven match insights delivered to web, WhatsApp or Telegram." />
   <!-- Tailwind via CDN for quick prototyping -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="theme-color" content="#4f46e5" />
-  <!-- Simple JSON-LD for search engines -->
+  <meta name="theme-color" content="#0b2545" />
+  <style>
+    /* small helper to ensure readable text over images */
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(11,37,69,0.55) 0%, rgba(11,37,69,0.75) 100%);
+    }
+    .btn-primary {
+      background-color: #D4AF37; /* gold */
+      color: #0b2545; /* navy text */
+    }
+    .btn-primary:hover { filter: brightness(0.95); }
+    .brand-navy { background-color: #0b2545; }
+    .accent-gold { color: #D4AF37; border-color: #D4AF37; }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -22,12 +34,12 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased">
   <!-- Header -->
-  <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white">
+  <header class="brand-navy text-white">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-4">
-        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold">WP</div>
+        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-lg">WM</div>
         <div>
-          <a href="#" class="text-2xl font-semibold">winnersPro</a>
+          <a href="#" class="text-2xl font-semibold">WinMastersAI</a>
           <div class="text-xs opacity-90">AI-backed soccer predictions</div>
         </div>
       </div>
@@ -41,21 +53,21 @@
       </nav>
 
       <div class="flex items-center space-x-3">
-        <a href="#signup" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium shadow">Get Started</a>
+        <a href="#signup" class="bg-white text-[#0b2545] px-4 py-2 rounded-lg font-medium shadow">Get Started</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero / Intro -->
+  <!-- Hero / Intro with stadium background + overlay -->
   <main id="home" class="max-w-6xl mx-auto px-6 py-12">
     <section class="grid md:grid-cols-2 gap-8 items-center">
-      <div>
-        <h1 class="text-4xl font-extrabold">winnersPro — AI-backed soccer predictions</h1>
+      <div class="relative z-10">
+        <h1 class="text-4xl font-extrabold text-[#0b2545]">WinMastersAI — AI-backed soccer predictions</h1>
         <p class="mt-4 text-gray-700">Reliable, transparent predictions powered by machine learning and market signals. Try a free trial and get daily premium picks sent to WhatsApp or Telegram.</p>
 
         <div class="mt-6 flex items-center space-x-4">
-          <a href="#signup" class="bg-indigo-600 text-white px-5 py-3 rounded-lg font-semibold shadow">Start free trial</a>
-          <a href="#predictions" class="border px-5 py-3 rounded-lg">See today's picks</a>
+          <a href="#signup" class="btn-primary px-5 py-3 rounded-lg font-semibold shadow">Start free trial</a>
+          <a href="#predictions" class="border px-5 py-3 rounded-lg border-[#D4AF37] text-[#0b2545]">See today's picks</a>
         </div>
 
         <div class="mt-8 grid grid-cols-3 gap-4">
@@ -74,23 +86,26 @@
         </div>
       </div>
 
-      <!-- Sample predictions card -->
-      <aside class="bg-white rounded-xl p-6 shadow">
-        <div class="font-semibold">Sample predictions — today</div>
-        <ul id="sample-list" class="mt-4 space-y-3">
-          <!-- Items will be populated by JS -->
-        </ul>
+      <!-- Sample predictions card with background image -->
+      <aside class="bg-white rounded-xl p-6 shadow relative overflow-hidden">
+        <div class="absolute inset-0 opacity-30" style="background-image: url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg'); background-size:cover; background-position:center;"></div>
+        <div class="relative z-10">
+          <div class="font-semibold text-[#0b2545]">Sample predictions — today</div>
+          <ul id="sample-list" class="mt-4 space-y-3">
+            <!-- Items will be populated by JS -->
+          </ul>
 
-        <div class="mt-6 flex justify-between items-center">
-          <div class="text-sm text-gray-600">Want these delivered to WhatsApp?</div>
-          <a href="#signup" class="px-4 py-2 bg-indigo-600 text-white rounded-lg">Join VIP</a>
+          <div class="mt-6 flex justify-between items-center">
+            <div class="text-sm text-gray-600">Want these delivered to WhatsApp?</div>
+            <a href="#signup" class="px-4 py-2 btn-primary rounded-lg inline-block">Join VIP</a>
+          </div>
         </div>
       </aside>
     </section>
 
     <!-- How it works -->
     <section id="about" class="mt-14">
-      <h2 class="text-2xl font-bold">How winnersPro works</h2>
+      <h2 class="text-2xl font-bold text-[#0b2545]">How WinMastersAI works</h2>
       <div class="mt-4 grid md:grid-cols-3 gap-6">
         <div class="p-4 bg-white rounded-lg shadow-sm">
           <div class="font-semibold">1. Data</div>
@@ -110,7 +125,7 @@
     <!-- Predictions -->
     <section id="predictions" class="mt-14">
       <div class="flex justify-between items-center">
-        <h1 class="text-3xl font-bold">Today's Predictions</h1>
+        <h1 class="text-3xl font-bold text-[#0b2545]">Today's Predictions</h1>
         <div id="picks-count" class="text-sm text-gray-600">0 picks</div>
       </div>
 
@@ -121,7 +136,7 @@
 
     <!-- Pricing -->
     <section id="pricing" class="mt-14">
-      <h1 class="text-3xl font-bold">Pricing</h1>
+      <h1 class="text-3xl font-bold text-[#0b2545]">Pricing</h1>
       <div class="mt-6 grid md:grid-cols-3 gap-6">
         <div class="p-6 bg-white rounded-lg shadow-sm">
           <div class="text-xl font-semibold">Free</div>
@@ -129,11 +144,11 @@
           <div class="mt-4 font-bold">R0 / month</div>
           <button class="mt-4 w-full px-4 py-2 border rounded">Get free</button>
         </div>
-        <div class="p-6 bg-white rounded-lg shadow-sm border-2 border-indigo-600">
+        <div class="p-6 bg-white rounded-lg shadow-sm border-2 border-[#D4AF37]">
           <div class="text-xl font-semibold">VIP</div>
           <div class="mt-2 text-sm text-gray-600">Full access to daily premium picks delivered to WhatsApp/Telegram.</div>
           <div class="mt-4 font-bold">R199 / month</div>
-          <button class="mt-4 w-full px-4 py-2 bg-indigo-600 text-white rounded">Start trial</button>
+          <button class="mt-4 w-full px-4 py-2 btn-primary rounded">Start trial</button>
         </div>
         <div class="p-6 bg-white rounded-lg shadow-sm">
           <div class="text-xl font-semibold">Business</div>
@@ -146,12 +161,12 @@
 
     <!-- Signup -->
     <section id="signup" class="mt-14 max-w-2xl mx-auto">
-      <h2 class="text-2xl font-bold">Start your free trial</h2>
+      <h2 class="text-2xl font-bold text-[#0b2545]">Start your free trial</h2>
       <form id="signup-form" class="mt-6 bg-white p-6 rounded-lg shadow-sm grid gap-4">
         <input id="email" type="email" placeholder="you@example.com" required class="border rounded px-3 py-2" />
         <input id="phone" type="tel" placeholder="+27 71 000 0000 (for WhatsApp delivery)" class="border rounded px-3 py-2" />
         <div class="flex items-center justify-between">
-          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded">Start free trial</button>
+          <button type="submit" class="px-4 py-2 btn-primary rounded">Start free trial</button>
           <div class="text-sm text-gray-500">No card required</div>
         </div>
         <div id="signup-result" class="text-sm text-green-600 hidden">Thanks — we'll contact you to activate your trial.</div>
@@ -164,7 +179,7 @@
     <div class="max-w-6xl mx-auto px-6 py-10">
       <div class="md:flex md:justify-between">
         <div>
-          <div class="font-bold text-lg">winnersPro</div>
+          <div class="font-bold text-lg">WinMastersAI</div>
           <div class="text-sm text-gray-600 mt-2">AI-backed soccer predictions you can trust. Trackable results & transparent record.</div>
         </div>
 
@@ -198,7 +213,7 @@
         </div>
       </div>
 
-      <div class="mt-8 text-sm text-gray-500">© <span id="year"></span> winnersPro — All rights reserved.</div>
+      <div class="mt-8 text-sm text-gray-500">© <span id="year"></span> WinMastersAI — All rights reserved.</div>
     </div>
   </footer>
 
@@ -258,7 +273,7 @@
             <div class="text-xs text-gray-500">AI confidence: ${p.confidence}%</div>
             <div class="flex items-center space-x-2">
               <button class="px-3 py-1 text-sm border rounded" onclick="savePick(${p.id})">Save</button>
-              <button class="px-3 py-1 text-sm bg-indigo-600 text-white rounded" onclick="subscribePick(${p.id})">Subscribe</button>
+              <button class="px-3 py-1 text-sm btn-primary rounded" onclick="subscribePick(${p.id})">Subscribe</button>
             </div>
           </div>
         `;
@@ -309,9 +324,6 @@
         console.warn('Could not fetch live predictions — using sample data.', err);
       }
     }
-
-    // If you want to load live predictions on page load, uncomment:
-    // fetchLivePredictions();
 
     // Signup form handler (demo)
     document.getElementById('signup-form').addEventListener('submit', function (e) {
